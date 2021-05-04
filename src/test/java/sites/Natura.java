@@ -9,6 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +28,7 @@ public class Natura {
     //Atributos
     WebDriver driver;
     String url;
+    WebDriverWait wait;
     String pastaPrint = "evidencias/" + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(Calendar.getInstance().getTime()) + "/";
 
     //Metodos e Funcoes - Tirar Prints
@@ -38,10 +42,11 @@ public class Natura {
     @Before
     public void iniciar(){
         url = "https://natura.com.br";
-        System.setProperty("webdriver.chrome.driver", "drivers/chrome/87/chromedriver.exe");
-        driver = new ChromeDriver();
+        System.setProperty("webdriver.edge.driver","drivers/edge/msedgedriver90.exe");
+        driver = new EdgeDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);
+        wait = new WebDriverWait(driver, 10);
+        //driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);
     }
 
     @After
@@ -50,16 +55,20 @@ public class Natura {
     }
 
     @Test
-    public void consultaProdutoNatura() throws InterruptedException, IOException {
+    public void consultaProdutoNatura() throws IOException {
         driver.get(url);
+
+        //Aguardar carregar o site
+        //wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("Busca")));
+
 
         tirarPrint("Print 1 - Exibe Site da Natura");
         driver.findElement(By.cssSelector("span.SearchPreview_searchLabel__rS3z8")).click();
-        driver.findElement(By.cssSelector("input.ComposedField_input__1zmI0")).sendKeys("KAIAK MASCULINO" + Keys.ENTER);
-        tirarPrint("Passo 2 - Exibe pesquisa pelo produto KAIAK MASCULINO");
+        driver.findElement(By.cssSelector("span.SearchPreview_searchLabel__rS3z8")).sendKeys("KAIAK MASCULINO" + Keys.ENTER);
+        tirarPrint("Print 2 - Exibe pesquisa pelo produto KAIAK MASCULINO");
 
         //Validar produtos encontrados na pesquisa
-        assertEquals("Kaiak Masculino", driver.findElement(By.cssSelector("span.SearchPreview_searchLabel__rS3z8")).getText());
+        assertEquals("KAIAK MASCULINO", driver.findElement(By.cssSelector("span.SearchTitle_search-title__main__3c857")).getText());
 
         //fechar pop-up
         //driver.findElement(By.cssSelector("a.btClose")).click();

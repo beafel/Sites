@@ -34,10 +34,9 @@ public class Boticario {
         ChromeOptions chOptions = new ChromeOptions(); // instanciar o objeto de configuracao do ChromeDriver
         chOptions.addArguments("--disable-notifications");
 
-        System.setProperty("webdriver.chrome.driver","drivers/chrome/87/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver","drivers/chrome/90/chromedriver90.exe");
         driver = new ChromeDriver(chOptions); // <-- Instanciar o Selenium como um controlador do Chrome
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);
     }
 
     @After
@@ -46,7 +45,7 @@ public class Boticario {
     }
 
     @Test
-    public void consultarProdutoBoticario() throws InterruptedException, IOException {
+    public void consultarProdutoBoticario() throws IOException {
         driver.get(url);
         driver.findElement(By.id("onetrust-accept-btn-handler")).click();
         //todo: fazer o 2o popup (do browser)
@@ -62,8 +61,8 @@ public class Boticario {
         driver.findElement(By.cssSelector("a[href^='https://www.boticario.com.br/quasar-graffiti-desodorante-colonia-100-ml/']")).click();
 
         assertTrue(driver.findElement(By.cssSelector("div.nproduct-header")).getText().contains("Quasar Graffiti Desodorante"));
-        assertEquals("R$ 45,90", driver.findElement(By.cssSelector("div.nproduct-price-value")).getText());
-        assertEquals("2x de R$ 22,95", driver.findElement(By.cssSelector("div.nproduct-price-installments")).getText());
+        assertEquals("R$ 114,90", driver.findElement(By.cssSelector("div.nproduct-price-value")).getText());
+        assertEquals("5x de R$ 22,98", driver.findElement(By.cssSelector("div.nproduct-price-installments")).getText());
 
         tirarPrint("Print 3 - Exibe a pagina do produto");
     }
