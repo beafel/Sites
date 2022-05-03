@@ -42,11 +42,11 @@ public class Natura {
     @Before
     public void iniciar(){
         url = "https://natura.com.br";
-        System.setProperty("webdriver.edge.driver","drivers/edge/msedgedriver90.exe");
+        System.setProperty("webdriver.edge.driver","drivers/edge/msedgedriver101.exe");
         driver = new EdgeDriver();
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, 10);
-        //driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);
+        driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);
     }
 
     @After
@@ -60,24 +60,25 @@ public class Natura {
 
         //Aguardar carregar o site
         //wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("Busca")));
-
-
-        tirarPrint("Print 1 - Exibe Site da Natura");
-        driver.findElement(By.cssSelector("span.SearchPreview_searchLabel__rS3z8")).click();
-        driver.findElement(By.cssSelector("span.SearchPreview_searchLabel__rS3z8")).sendKeys("KAIAK MASCULINO" + Keys.ENTER);
-        tirarPrint("Print 2 - Exibe pesquisa pelo produto KAIAK MASCULINO");
-
-        //Validar produtos encontrados na pesquisa
-        assertEquals("KAIAK MASCULINO", driver.findElement(By.cssSelector("span.SearchTitle_search-title__main__3c857")).getText());
-
         //fechar pop-up
         //driver.findElement(By.cssSelector("a.btClose")).click();
 
-        driver.findElement(By.tagName("Kaiak Masculino")).click();
-        tirarPrint("Passo 3 - Exibe a pagina do produto KAIAK MASCULINO");
+        driver.findElement(By.name("search")).click();
+        driver.findElement(By.name("search")).sendKeys("Kaiak Masculino" + Keys.ENTER);
+
+        tirarPrint("Print 1 - Exibe Site da Natura");
+
+        //Validar produtos encontrados na pesquisa
+        assertTrue(driver.findElement(By.cssSelector("div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12")).getText().contains("KAIAK MASCULINO"));
+
+        //tirarPrint("Print 2 - Exibe pesquisa pelo produto KAIAK MASCULINO");
+
+        driver.findElement(By.xpath("//h5[contains(text(),'Kaiak Desodorante Colônia Masculino')]")).click();
 
         //Validar valor e parcelamento do produto
-        assertEquals("R$ 121,90", driver.findElement(By.cssSelector("span.price-value")).getText());
-        assertTrue(driver.findElement(By.cssSelector("InstallmentPhrase_phrase__1wrE8")).getText().contains("4x de R$ 30,48 sem juros"));
+        assertEquals("R$ 139,90", driver.findElement(By.cssSelector("p.MuiTypography-root.natds336.MuiTypography-body1")).getText());
+        assertTrue(driver.findElement(By.cssSelector("p.MuiTypography-root.natds342.natds692.MuiTypography-body1")).getText().contains("4x de R$ 34,98 sem juros"));
+
+        //tirarPrint("Print 3 - Exibe a pagina do produto KAIAK MASCULINO");
     }
 }
